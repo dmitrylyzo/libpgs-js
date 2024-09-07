@@ -4,6 +4,45 @@ import {Pgs} from "./pgs";
 const pgs = new Pgs();
 let renderer: Renderer | undefined = undefined;
 
+/**
+ * Implement console methods if they're missing.
+ */
+const makeConsole = () => {
+    if (typeof console !== 'undefined') {
+        console.debug('native console');
+        return;
+    }
+
+    console = (function () {
+        const postConsoleMessage = (prefix: string, ...args: any[]) => {
+            postMessage({
+                op: `console-${prefix}`,
+                content: JSON.stringify(args),
+            });
+        };
+
+        return {
+            log: (...args: any[]) => {
+                postConsoleMessage('log', ...args);
+            },
+            debug: (...args: any[]) => {
+                postConsoleMessage('debug', ...args);
+            },
+            info: (...args: any[]) => {
+                postConsoleMessage('info', ...args);
+            },
+            warn: (...args: any[]) => {
+                postConsoleMessage('warn', ...args);
+            },
+            error: (...args: any[]) => {
+                postConsoleMessage('error', ...args);
+            }
+        }
+    })() as any;
+
+    console.debug('overridden console');
+}
+
 // Inform the main process that the subtitle data was loaded and return all update timestamps
 const submitTimestamps = () => {
     postMessage({
@@ -18,6 +57,8 @@ onmessage = (e: MessageEvent) => {
 
         // Initialized the worker thread and receives the canvas (if supported).
         case 'init': {
+            makeConsole();
+
             const canvas: OffscreenCanvas = e.data.canvas;
 
             // The canvas is optional. If provided, the web-worker can use it to render the subtitles.

@@ -48,6 +48,31 @@ export abstract class PgsRendererInWorker extends PgsRendererImpl {
      */
     protected onWorkerMessage(e: MessageEvent): void {
         switch (e.data.op) {
+            case 'console-log': {
+                console.log.apply(console, JSON.parse(e.data.content));
+                break;
+            }
+
+            case 'console-debug': {
+                console.debug.apply(console, JSON.parse(e.data.content));
+                break;
+            }
+
+            case 'console-info': {
+                console.info.apply(console, JSON.parse(e.data.content));
+                break;
+            }
+
+            case 'console-warn': {
+                console.warn.apply(console, JSON.parse(e.data.content));
+                break;
+            }
+
+            case 'console-error': {
+                console.error.apply(console, JSON.parse(e.data.content));
+                break;
+            }
+
             // Is called once a subtitle file was loaded.
             case 'updateTimestamps': {
                 this.setUpdateTimestamps(e.data.updateTimestamps);
