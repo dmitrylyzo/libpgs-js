@@ -1,3 +1,5 @@
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
 import typescript from "@rollup/plugin-typescript";
 import terser from '@rollup/plugin-terser';
 
@@ -19,7 +21,12 @@ export default [
             file: 'dist/libpgs.js',
             format: 'es'
         },
-        plugins: [terser(terserOptions), typescript(typescriptOptions)]
+        plugins: [
+            terser(terserOptions),
+            typescript(typescriptOptions),
+            commonjs(),
+            resolve()
+        ]
     },
     {
         input: 'src/worker.ts',
@@ -27,6 +34,11 @@ export default [
             file: 'dist/libpgs.worker.js',
             format: 'es'
         },
-        plugins: [terser(terserOptions), typescript(typescriptOptions)]
+        plugins: [
+            terser(terserOptions),
+            typescript(typescriptOptions),
+            commonjs(),
+            resolve()
+        ]
     }
 ];

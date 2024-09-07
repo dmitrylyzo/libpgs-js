@@ -1,3 +1,7 @@
+import "core-js/stable/promise";
+import "whatwg-fetch";
+import "./legacy/performance";
+
 import {BigEndianBinaryReader} from "./utils/bigEndianBinaryReader";
 import {DisplaySet} from "./pgs/displaySet";
 import {BinaryReader} from "./utils/binaryReader";

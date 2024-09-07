@@ -27,6 +27,8 @@
     "clear": "rm -rf ./dist"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "26.0.1",
+    "@rollup/plugin-node-resolve": "15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@tsconfig/recommended": "^1.0.6",
@@ -39,5 +41,9 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.6.3",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "core-js": "3.38.1",
+    "whatwg-fetch": "3.6.20"
   }
 }
