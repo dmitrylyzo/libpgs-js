@@ -1,6 +1,7 @@
 import {PgsRendererOptions} from "./pgsRendererOptions";
 import {PgsRendererImpl} from "./pgsRendererImpl";
 import {PgsRendererInWorkerWithOffscreenCanvas} from "./pgsRendererInWorkerWithOffscreenCanvas";
+import {PgsRendererInWorkerWithoutOffscreenCanvas} from "./pgsRendererInWorkerWithoutOffscreenCanvas";
 import {PgsRendererInMainThread} from "./pgsRendererInMainThread";
 
 /**
@@ -73,10 +74,10 @@ export class PgsRenderer {
         const isOffscreenCanvasSupported = this.isOffscreenCanvasSupported();
         console.log(`isWebWorkerSupported: ${isWorkerSupported}, isOffscreenCanvasSupported: ${isOffscreenCanvasSupported}`);
 
-        // FIXME: I would like to use `PgsRendererInWorkerWithoutOffscreenCanvas` if the offscreen canvas is not
-        //        available, but even the web worker thread won't start on webOS and I can't figure out why.
-        if (isWorkerSupported && isOffscreenCanvasSupported) {
-            return new PgsRendererInWorkerWithOffscreenCanvas(options, this.canvas);
+        if (isWorkerSupported) {
+            return isOffscreenCanvasSupported
+                ? new PgsRendererInWorkerWithOffscreenCanvas(options, this.canvas)
+                : new PgsRendererInWorkerWithoutOffscreenCanvas(options, this.canvas);
         } else {
 
             return new PgsRendererInMainThread(options, this.canvas);
